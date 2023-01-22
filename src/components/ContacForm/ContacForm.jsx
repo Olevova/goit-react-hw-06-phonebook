@@ -5,9 +5,16 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import style from './ContacForm.module.scss';
-import PropTypes from 'prop-types';
+import { getContacts } from '../../redux/selectors';
+import { useDispatch } from 'react-redux';
+import { addcontact } from '../../redux/contactSlice';
+import { nanoid } from 'nanoid';
+import { useSelector } from 'react-redux';
 
-export const ContactForm = ({ onSubmit, contacts }) => {
+export const ContactForm = () => {
+  const contacts = useSelector(getContacts);
+  const dispatch = useDispatch();
+
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
@@ -31,10 +38,11 @@ export const ContactForm = ({ onSubmit, contacts }) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSubmit({ name, number });
-    if (contacts.find(i => i.name === name)) {
+    if (contacts.find(elem => elem.name === name)) {
+      alert(`Person with name ${name} is in a date`);
       return;
     }
+    dispatch(addcontact({ id: nanoid(5), name, number }));
     reset();
   };
 
@@ -96,8 +104,4 @@ export const ContactForm = ({ onSubmit, contacts }) => {
       </Paper>
     </Box>
   );
-};
-
-ContactForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
 };
