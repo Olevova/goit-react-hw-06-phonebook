@@ -1,28 +1,18 @@
 import { ContactElem } from '../ContactElem/ContactElem';
 import { getContacts, getFilter } from '../../redux/selectors';
-import { useDispatch, useSelector } from 'react-redux';
-import { delcontact } from '../../redux/contactSlice';
+import { useSelector } from 'react-redux';
 
 export const Contacts = () => {
   const contacts = useSelector(getContacts);
-  const filter = useSelector(getFilter);
-  const dispatch = useDispatch();
-
-  const deleteContact = id => {
-    dispatch(delcontact(id));
-  };
+  const filterWord = useSelector(getFilter);
+  console.log(contacts, 1);
 
   const filterContacts = contacts.filter(cont => {
-    return cont.name.toLowerCase().includes(filter.toLowerCase());
+    return cont.name.toLowerCase().includes(filterWord.toLowerCase());
   });
+  console.log(filterContacts, 2);
 
   return filterContacts.map(({ id, name, number }) => (
-    <ContactElem
-      key={id}
-      id={id}
-      name={name}
-      number={number}
-      delCont={deleteContact}
-    />
+    <ContactElem key={id} id={id} name={name} number={number} />
   ));
 };
